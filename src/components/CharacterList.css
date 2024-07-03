@@ -1,0 +1,19 @@
+.char-list {
+    background-color: #242424;
+    padding: 10px 10px;
+    border-radius: 5px;
+    max-height: 900px;
+    overflow-y: auto;
+}
+
+li {
+    /* outline: 1px solid aquamarine; */
+    border: 1px solid aquamarine;
+    padding: 5px;
+    margin-top: 4px;
+}
+
+li:hover {
+    background-color: aquamarine;
+    cursor: pointer;
+}
