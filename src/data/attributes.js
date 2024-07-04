@@ -1,7 +1,4 @@
 /*
-import { affiliation, origin, race, dftype, gender, bounty, haki, arcs } from "../../scraper/atribs.json"
-let attribs = [affiliation, origin, race, dftype, gender, bounty, haki, arcs]
-
 add will of d to attribs scraping 
 
 1) import attribs and replace the data in this file
@@ -12,68 +9,19 @@ this is so in grid, we can say: debut_arc: "Romance Dawn" vs appeared_in: "Roman
 
 */
 
-let gender = ["Male", "Female", "N/A"]
-let df_type = [
-    "Paramecia",
-    "Artificial Paramecia",
-    "Special Paramecia",
-    "Zoan",
-    "Ancient Zoan",
-    "Mythical Zoan",
-    "Artificial Zoan",
-    "SMILE",
-    "Logia",
-]
-let race = [
-    "Humans",
-    "Fish-Men",
-    "Giants",
-    "Merfolk",
-    "Skypieans",
-    "Shandia",
-    "Birkans",
-    "Minks",
-    "Longarms",
-    "Longleg Tribe",
-    "Dwarves",
-    "Snakeneck",
-    "Lunarians",
-    "Wotans",
-    "Buccaneers",
-    "Cyborgs",
-    "Zombies",
-    "Toys",
-    "Homies",
-    "Other"
-]
-let origin = [
-    "East Blue",
-    "West Blue",
-    "North Blue",
-    "South Blue",
-    "Grand Line",
-    "Calm Belt",
-    "Red Line",
-    "Sea Floor",
-    "Sky Islands"
-]
-let affiliations = [
-    "Marines",
-    "World Government",
-    "Straw Hat Pirates",
-    "The Revolutionary Army",
-    "Straw Hat Grand Fleet",
-    "Pirates"
-]
+import { affiliation, origin, race, dftype, gender, bounty, haki, arcs } from "../../scraper/atribs.json"
+let attributes = [affiliation, origin, race, dftype, gender, bounty, haki, arcs]
 
-let attributes = [gender, df_type, race, origin, affiliations]
 function selectAttributePair(random) {
     let lists = attributes;
     const listPairs = [
-        [0, 1], [0, 2], [0, 3], [0, 4],
-        [1, 2], [1, 3], [1, 4],
-        [2, 3], [2, 4],
-        [3, 4]
+        [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7],
+        [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7],
+        [2, 3], [2, 4], [2, 5], [2, 6], [2, 7],
+        [3, 4], [3, 5], [3, 6], [3, 7],
+        [4, 5], [4, 6], [4, 7],
+        [5, 6], [5, 7],
+        [6, 7]
     ];
 
     const totalCombinations = listPairs.reduce((sum, [i, j]) => sum + lists[i].length * lists[j].length, 0);

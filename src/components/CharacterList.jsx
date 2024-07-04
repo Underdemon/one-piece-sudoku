@@ -27,7 +27,7 @@ const CharacterList = ({ onSelectCharacter }) => {
       <ul>
         {filteredCharacters.map((character) => (
           <li key={character.id} onClick={() => onSelectCharacter(character)}>
-            {character.name} - {character.affiliation} (Gender: {character.gender})
+            {character.name}
           </li>
         ))}
       </ul>
