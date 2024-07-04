@@ -8,21 +8,25 @@ import { RNGProvider } from './context/RNGContext';
 import RNGComponent from './components/RNGComponent';
 import RandomCharacters from './components/RandomCharacters.jsx'
 import RNGattribs from './components/RNGattribs.jsx'
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 function App() {
   return (
-    <CharacterProvider>
-      <RNGProvider>
-        <div>
-          <h1>GRID</h1>
-          {/* <CharacterList /> */}
-          <Grid size={3} />
-          {/* <RNGComponent />
-          <RandomCharacters />
-          <RNGattribs /> */}
-        </div>
-      </RNGProvider>
-    </CharacterProvider>
+    <div>
+      <CharacterProvider>
+        <RNGProvider>
+          <div>
+            <h1>GRID</h1>
+            {/* <CharacterList /> */}
+            <Grid size={3} />
+            {/* <RNGComponent />
+            <RandomCharacters />
+            <RNGattribs /> */}
+          </div>
+        </RNGProvider>
+      </CharacterProvider>
+      <SpeedInsights />
+    </div>
   );
 }
 
