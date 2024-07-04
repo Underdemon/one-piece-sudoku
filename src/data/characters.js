@@ -48,7 +48,7 @@ characters.forEach(character => {
     }
 })
 
-console.log(attributeMap)
+// console.log(attributeMap)
 
 export default characters;
 export { characterMap, attributeMap }

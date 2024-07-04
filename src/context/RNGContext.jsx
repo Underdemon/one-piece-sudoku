@@ -65,9 +65,9 @@ export const RNGProvider = ({ children }) => {
                 while(!valid) {
                     let [randomValue, nextRng] = prand.uniformIntDistribution(0, 10000000, currentRng);
                     currentRng = nextRng;
-                    let attrib = selectSingleAttribute(randomValue);
-                    if(attributeMap.get(attrib) !== undefined && !chosenAttribs.includes(attrib)) {
-                        chosenAttribs.push(attrib);
+                    let [attribType, attrib] = selectSingleAttribute(randomValue);
+                    if(attributeMap.get(attrib) !== undefined && !chosenAttribs.some(attr => attr[1] === attrib)) {
+                        chosenAttribs.push([attribType, attrib]);
                         valid = true;
                     }
                 }
@@ -80,14 +80,14 @@ export const RNGProvider = ({ children }) => {
                     count++;
                     let [randomValue, nextRng] = prand.uniformIntDistribution(0, 10000000, currentRng);
                     currentRng = nextRng;
-                    let colAttrib = selectSingleAttribute(randomValue);
+                    let [attribType, colAttrib] = selectSingleAttribute(randomValue);
                     let colValues = attributeMap.get(colAttrib);
-                    if(colValues === undefined  || chosenAttribs.includes(colAttrib))
+                    if(colValues === undefined  || chosenAttribs.some(attr => attr[1] === colAttrib))
                         continue;
 
                     let validIntersection = true;
                     for (let j = 0; j < size; j++) {
-                        let rowAttrib = chosenAttribs[j];
+                        let rowAttrib = chosenAttribs[j][1];
                         let rowValues = attributeMap.get(rowAttrib);
                         if(rowAttrib === undefined || colValues.intersection(rowValues).size < 1) {
                             validIntersection = false;
@@ -96,7 +96,7 @@ export const RNGProvider = ({ children }) => {
                     }
 
                     if(validIntersection) {
-                        chosenAttribs.push(colAttrib);
+                        chosenAttribs.push([attribType, colAttrib]);
                         valid = true;
                     }
 

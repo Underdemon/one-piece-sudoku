@@ -32,7 +32,7 @@ const Grid = ({ size }) => {
   const handleCellClick = (row, col) => {
     if (selectedCell || gridData[row][col] !== '' || totalGuesses >= maxGuesses) return;
     console.log(`Cell clicked: (${row}, ${col})`);
-    console.log(rowLabels[row] + "   " + colLabels[col])
+    console.log(`${rowLabels[row][0]}: ${rowLabels[row][1]}   ${colLabels[col][0]}: ${colLabels[col][1]}`);
     setSelectedCell({ row, col });
     setShowCharacterList(true);
   };
@@ -45,8 +45,8 @@ const Grid = ({ size }) => {
   const handleCharacterSelect = (character) => {
     if(!selectedCell) return;
     const { row, col } = selectedCell;
-    const rowAttrib = rowLabels[row];
-    const colAttrib = colLabels[col];
+    const rowAttrib = rowLabels[row][1];
+    const colAttrib = colLabels[col][1];
 
     const isValidChoice = attributeMap.get(rowAttrib).has(character.name) && attributeMap.get(colAttrib).has(character.name);
     setTotalGuesses(totalGuesses + 1);
@@ -81,13 +81,13 @@ const Grid = ({ size }) => {
           </div>
           {colLabels.map((label, colIndex) => (
             <div key={`col-label-${colIndex}`} className="label-cell">
-              {label}
+              {`${label[0]}: ${label[1]}`}
             </div>
           ))}
         </div>
         {gridData.map((row, rowIndex) => (
           <div key={rowIndex} className="row">
-            <div className="label-cell">{rowLabels[rowIndex] || rowIndex + 1}</div>
+            <div className="label-cell">{rowLabels[rowIndex] ? `${rowLabels[rowIndex][0]}: ${rowLabels[rowIndex][1]}` : rowIndex + 1}</div>
             {row.map((cell, colIndex) => (
               <div
                 key={colIndex}

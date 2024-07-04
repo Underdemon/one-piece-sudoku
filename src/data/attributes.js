@@ -11,6 +11,7 @@ this is so in grid, we can say: debut_arc: "Romance Dawn" vs appeared_in: "Roman
 
 import { affiliation, origin, race, dftype, gender, bounty, haki, arcs } from "../../scraper/atribs.json"
 let attributes = [affiliation, origin, race, dftype, gender, bounty, haki, arcs]
+let attributesNames = ["affiliation", "origin", "race", "dftype", "gender", "bounty", "haki", "arcs"];
 
 function selectAttributePair(random) {
     let lists = attributes;
@@ -42,14 +43,14 @@ function selectAttributePair(random) {
 }
 
 function selectSingleAttribute(random) {
-    let lists = attributes; // Assuming attributes is defined elsewhere and is an array of arrays
+    let lists = attributes;
     const totalAttributes = lists.reduce((sum, list) => sum + list.length, 0);
-    
     let index = random % totalAttributes;
     
-    for (const list of lists) {
+    for (let i = 0; i < lists.length; i++) {
+        const list = lists[i];
         if (index < list.length) {
-            return list[index];
+            return [attributesNames[i], list[index]];
         }
         index -= list.length;
     }
