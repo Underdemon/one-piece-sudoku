@@ -66,7 +66,7 @@ export const RNGProvider = ({ children }) => {
                     let [randomValue, nextRng] = prand.uniformIntDistribution(0, 10000000, currentRng);
                     currentRng = nextRng;
                     let [attribType, attrib] = selectSingleAttribute(randomValue);
-                    if(attributeMap.get(attrib) !== undefined && !chosenAttribs.some(attr => attr[1] === attrib)) {
+                    if((attributeMap.get(attrib) !== undefined || attributeMap.get("Appeared In: " + attrib) !== undefined || attributeMap.get("Debuted In: " + attrib) !== undefined) && !chosenAttribs.some(attr => attr[1] === attrib)) {
                         chosenAttribs.push([attribType, attrib]);
                         valid = true;
                     }
@@ -82,14 +82,27 @@ export const RNGProvider = ({ children }) => {
                     currentRng = nextRng;
                     let [attribType, colAttrib] = selectSingleAttribute(randomValue);
                     let colValues = attributeMap.get(colAttrib);
+                    if(attribType === "Appeared In") {
+                        colValues = attributeMap.get("Appeared In: " + colAttrib);
+                    }
+                    else if(attribType === "Debuted In") {
+                        colValues = attributeMap.get("Debuted In: " + colAttrib);
+                    }
+
                     if(colValues === undefined  || chosenAttribs.some(attr => attr[1] === colAttrib))
                         continue;
 
                     let validIntersection = true;
                     for (let j = 0; j < size; j++) {
-                        let rowAttrib = chosenAttribs[j][1];
+                        let [rowType, rowAttrib] = chosenAttribs[j];
                         let rowValues = attributeMap.get(rowAttrib);
-                        if(rowAttrib === undefined || colValues.intersection(rowValues).size < 1) {
+                        if(rowType === "Appeared In") {
+                            rowValues = attributeMap.get("Appeared In: " + rowAttrib);
+                        }
+                        else if(rowType === "Debuted In") {
+                            rowValues = attributeMap.get("Debuted In: " + rowAttrib);
+                        }
+                        if(rowAttrib === undefined || colValues.intersection(rowValues).size < 2) { // the intersection size is the number of characters that fit any combination (so the number of possible characters that are valid)
                             validIntersection = false;
                             break;
                         }

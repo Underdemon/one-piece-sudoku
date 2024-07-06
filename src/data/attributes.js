@@ -50,7 +50,11 @@ function selectSingleAttribute(random) {
     for (let i = 0; i < lists.length; i++) {
         const list = lists[i];
         if (index < list.length) {
-            return [attributesNames[i], list[index]];
+            if(attributesNames[i] === "arcs") {
+                return Math.random() < 0.5 ? ["Appeared In", list[index]] : ["Debuted In", list[index]];
+            }
+            else
+                return [attributesNames[i], list[index]];
         }
         index -= list.length;
     }
