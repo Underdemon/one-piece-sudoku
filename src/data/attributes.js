@@ -1,14 +1,4 @@
-/*
-add will of d to attribs scraping 
-
-1) import attribs and replace the data in this file
-2) modify characters.js to make attributemap/import it
-3) return list containing (attributeType, attributeValue) eg: dftype: "Paramecia" for the randomly chosen attrib
-then in rngcontext make sure to check by the value
-this is so in grid, we can say: debut_arc: "Romance Dawn" vs appeared_in: "Romance Dawn"
-
-*/
-
+// attributes.js
 import { affiliation, origin, race, dftype, gender, bounty, haki, arcs } from "../../scraper/atribs.json"
 let attributes = [affiliation, origin, race, dftype, gender, bounty, haki, arcs]
 let attributesNames = ["affiliation", "origin", "race", "dftype", "gender", "bounty", "haki", "arcs"];

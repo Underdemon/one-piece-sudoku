@@ -1,3 +1,4 @@
+// characters.js
 import characters from "../../scraper/characters.json"
 
   /*

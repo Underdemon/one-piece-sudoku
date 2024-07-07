@@ -1,0 +1,27 @@
+/* CharacterCard.css */
+.character-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    overflow: hidden; /* Prevents overflow from affecting other cells */
+}
+
+.character-image {
+    max-width: 100%;
+    max-height: 70%;
+    object-fit: cover; /* Ensures the image fills the container without distortion */
+}
+
+.character-name {
+    margin-top: 5px;
+    font-size: 12px; /* Adjust font size as needed */
+    font-weight: bold;
+    width: 100%; /* Ensures text does not overflow horizontally */
+    white-space: nowrap; /* Prevents text from wrapping */
+    /* overflow: hidden; Hides any overflow */
+    /* text-overflow: ellipsis; Shows ellipsis (...) for overflowed text */
+}

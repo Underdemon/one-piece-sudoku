@@ -6,6 +6,7 @@ import { useRNG } from '../context/RNGContext.jsx';
 import CharacterList from './CharacterList.jsx';
 import { CharacterContext } from '../context/CharacterContext.jsx';
 import { attributeMap } from '../data/characters.js';
+import CharacterCard from './CharacterCard.jsx';
 
 const Grid = ({ size }) => {
   const { getAttributes } = useRNG();
@@ -45,15 +46,29 @@ const Grid = ({ size }) => {
   const handleCharacterSelect = (character) => {
     if(!selectedCell) return;
     const { row, col } = selectedCell;
-    const rowAttrib = rowLabels[row][1];
-    const colAttrib = colLabels[col][1];
+    let [rowAttribType, rowAttrib] = rowLabels[row];
+    let [colAttribType, colAttrib] = colLabels[col];
+
+    if(rowAttribType === "Appeared In") {
+      rowAttrib = "Appeared In: " + rowAttrib
+    }
+    else if(rowAttribType === "Debuted In") {
+      rowAttrib = "Debuted In: " + rowAttrib
+    }
+
+    if(colAttribType === "Appeared In") {
+      colAttrib = "Appeared In: " + colAttrib
+    }
+    else if(colAttribType === "Debuted In") {
+      colAttrib = "Debuted In: " + colAttrib
+    }
 
     const isValidChoice = attributeMap.get(rowAttrib).has(character.name) && attributeMap.get(colAttrib).has(character.name);
     setTotalGuesses(totalGuesses + 1);
 
     if(isValidChoice) {
       const newGridData = [...gridData];
-      newGridData[row][col] = character.name;
+      newGridData[row][col] = character;
       setGridData(newGridData);
     }
     else {
@@ -96,7 +111,7 @@ const Grid = ({ size }) => {
                   ${rowIndex === size - 1 && colIndex === size - 1 ? 'bottom-right' : ''}`}
                 onClick={() => handleCellClick(rowIndex, colIndex)}
               >
-                {cell}
+                {cell ? <CharacterCard character={cell}/> : ''}
               </div>
             ))}
           </div>

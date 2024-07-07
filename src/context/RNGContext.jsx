@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext, useCallback } from "react";
+// RNGContext.jsx
+import React, { createContext, useState, useContext, useCallback, useEffect } from "react";
 import prand, { xoroshiro128plus } from "pure-rand";
 import { CharacterContext } from '../context/CharacterContext.jsx';
 import { selectSingleAttribute } from "../data/attributes.js";
@@ -21,6 +22,10 @@ export const RNGProvider = ({ children }) => {
     const seed = getSeedFromDate();
     const [rng, setRng] = useState(() => xoroshiro128plus(seed));
     const { characters } = useContext(CharacterContext);
+
+    useEffect(() => {
+        setRng(xoroshiro128plus(seed));
+    }, [seed]);
 
     // function gets next random number and updates rng
     const getNextRandom = useCallback((n) => {
@@ -102,7 +107,8 @@ export const RNGProvider = ({ children }) => {
                         else if(rowType === "Debuted In") {
                             rowValues = attributeMap.get("Debuted In: " + rowAttrib);
                         }
-                        if(rowAttrib === undefined || colValues.intersection(rowValues).size < 2) { // the intersection size is the number of characters that fit any combination (so the number of possible characters that are valid)
+
+                        if(rowAttrib === undefined || colValues === undefined || colValues.intersection(rowValues).size < 2) { // the intersection size is the number of characters that fit any combination (so the number of possible characters that are valid)
                             validIntersection = false;
                             break;
                         }
@@ -113,7 +119,7 @@ export const RNGProvider = ({ children }) => {
                         valid = true;
                     }
 
-                    if(count > 200)
+                    if(count > 50)
                         continue breakLoop;
                 }
             }
