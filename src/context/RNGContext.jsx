@@ -108,7 +108,16 @@ export const RNGProvider = ({ children }) => {
                             rowValues = attributeMap.get("Debuted In: " + rowAttrib);
                         }
 
-                        if(rowAttrib === undefined || colValues === undefined || colValues.intersection(rowValues).size < 2) { // the intersection size is the number of characters that fit any combination (so the number of possible characters that are valid)
+
+                        if (
+                            rowAttrib === undefined ||
+                            colValues === undefined ||
+                            rowValues === undefined ||
+                            !(colValues instanceof Set) ||
+                            !(rowValues instanceof Set) ||
+                            colValues.intersection(rowValues).size < 2 // the intersection size is the number of characters that fit any combination (so the number of possible characters that are valid)
+                        ) 
+                        {
                             validIntersection = false;
                             break;
                         }
@@ -139,48 +148,3 @@ export const RNGProvider = ({ children }) => {
 
 // custom hook to use the rng context
 export const useRNG = () => useContext(RNGContext);
-
-
-
-// const getAttributes = useCallback((size) => {
-    //     // size is the length of a row/column
-    //     const chosenAttribs = [];
-    
-    //     let currentRng = rng; // Initialize with the current RNG state
-    
-    //     // generate enough attributes for all rows
-    //     for (let i = 0; i < size; i++) {
-    //         const [randomValue, nextRng] = prand.uniformIntDistribution(0, 10000, currentRng);
-    //         if(attributeMap.get(randomValue) !== undefined)
-    //             chosenAttribs.push(selectSingleAttribute(randomValue));
-    //         else
-    //             i--;
-    //         currentRng = nextRng; // Update the current RNG state
-    //     }
-    
-    //     console.log(chosenAttribs);
-    
-    //     for (let i = size; i < size * 2; i++) {
-    //         let [randomValue, nextRng] = prand.uniformIntDistribution(0, 10000, currentRng);
-    //         let colAttrib = selectSingleAttribute(randomValue);
-    //         currentRng = nextRng; // Update the current RNG state
-    
-    //         let colValues = attributeMap.get(colAttrib);
-    
-    //         for (let j = 0; j < size; j++) {
-    //             let rowAttrib = chosenAttribs[j];
-    //             let rowValues = attributeMap.get(rowAttrib);
-    //             if (rowValues === undefined) {
-    //                 i--;
-    //                 break;
-    //             } else if (colValues.intersection(rowValues).size < 1) {
-    //                 i--;
-    //                 break;
-    //             }
-    //         }
-    //         chosenAttribs.push(colAttrib);
-    //     }
-    
-    //     console.log(chosenAttribs);
-    //     return chosenAttribs;
-    // }, [rng]);
