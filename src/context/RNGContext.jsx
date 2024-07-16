@@ -60,9 +60,11 @@ export const RNGProvider = ({ children }) => {
         // size is the length of a row/column
         let chosenAttribs = [];
         let currentRng = rng; // Initialize with the current RNG state
+        let bountySelected = false;
         
         breakLoop:
         while(true) {
+            bountySelected = false;
             chosenAttribs = [];
             // generate enough attributes for all rows
             for(let i = 0; i < size; i++) {
@@ -71,8 +73,13 @@ export const RNGProvider = ({ children }) => {
                     let [randomValue, nextRng] = prand.uniformIntDistribution(0, 10000000, currentRng);
                     currentRng = nextRng;
                     let [attribType, attrib] = selectSingleAttribute(randomValue);
+
+                    if(attribType === "Bounty" && bountySelected)
+                        continue;
+
                     if((attributeMap.get(attrib) !== undefined || attributeMap.get("Appeared In: " + attrib) !== undefined || attributeMap.get("Debuted In: " + attrib) !== undefined) && !chosenAttribs.some(attr => attr[1] === attrib)) {
                         chosenAttribs.push([attribType, attrib]);
+                        if (attribType === "Bounty") bountySelected = true;
                         valid = true;
                     }
                 }
@@ -94,7 +101,7 @@ export const RNGProvider = ({ children }) => {
                         colValues = attributeMap.get("Debuted In: " + colAttrib);
                     }
 
-                    if(colValues === undefined  || chosenAttribs.some(attr => attr[1] === colAttrib))
+                    if(colValues === undefined  || chosenAttribs.some(attr => attr[1] === colAttrib) || (attribType === "Bounty" && bountySelected))
                         continue;
 
                     let validIntersection = true;
@@ -125,6 +132,7 @@ export const RNGProvider = ({ children }) => {
 
                     if(validIntersection) {
                         chosenAttribs.push([attribType, colAttrib]);
+                        if (attribType === "Bounty") bountySelected = true;
                         valid = true;
                     }
 
@@ -148,3 +156,10 @@ export const RNGProvider = ({ children }) => {
 
 // custom hook to use the rng context
 export const useRNG = () => useContext(RNGContext);
+
+/**
+ * aws free tier
+ * https://supabase.com/
+ * https://render.com/
+ * https://firebase.google.com/pricing
+ */

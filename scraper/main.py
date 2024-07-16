@@ -558,7 +558,8 @@ if __name__ == "__main__":
 '''
 https://stackoverflow.com/a/45340858
 
-make sure in frontend, when choosing bounties, a rage is chosen
+add character id/remove duplicates
+add bounty scraping for characters like https://onepiece.fandom.com/wiki/Tony_Tony_Chopper and https://onepiece.fandom.com/wiki/Eustass_Kid
 
 for testing, dont filter the counters to > 1 count, and check what needs to be combined
     

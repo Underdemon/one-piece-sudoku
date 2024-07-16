@@ -70,7 +70,73 @@ characters.forEach(character => {
             else
                 continue;
         }
-        else if(key !== "id" && key !== "name" && key !== "image" && key !== "occupation" && key !== "status" && key !== "dfname" && key !== "dfename") {
+        else if(key === "bounty" && character.cross_guild_bounty === false) {
+            if(value === "None") {
+                if(attributeMap.has("No Bounty"))
+                    attributeMap.get("No Bounty").add(character.name);
+                else
+                    attributeMap.set("No Bounty", new Set([character.name]));
+            }
+            else if(value !== "Unknown") {
+                let bounty = parseInt(value.replace(/\,/g, ""));
+                // if(character.name === "Monkey D. Luffy") console.log(`value: ${value}       bounty: ${bounty}`)
+                if(bounty < 100000) {
+                    if(attributeMap.has("0-100,000"))
+                        attributeMap.get("0-100,000").add(character.name);
+                    else
+                        attributeMap.set("0-100,000", new Set([character.name]));
+                }
+                else if(bounty < 500000) {
+                    if(attributeMap.has("100,000-500,000"))
+                        attributeMap.get("100,000-500,000").add(character.name);
+                    else
+                        attributeMap.set("100,000-500,000", new Set([character.name]));
+                }
+                else if(bounty < 1000000) {
+                    if(attributeMap.has("500,000-1,000,000"))
+                        attributeMap.get("500,000-1,000,000").add(character.name);
+                    else
+                        attributeMap.set("500,000-1,000,000", new Set([character.name]));
+                }
+                else if(bounty < 10000000) {
+                    if(attributeMap.has("1,000,000-10,000,000"))
+                        attributeMap.get("1,000,000-10,000,000").add(character.name);
+                    else
+                        attributeMap.set("1,000,000-10,000,000", new Set([character.name]));
+                }
+                else if(bounty < 50000000) {
+                    if(attributeMap.has("10,000,000-50,000,000"))
+                        attributeMap.get("10,000,000-50,000,000").add(character.name);
+                    else
+                        attributeMap.set("10,000,000-50,000,000", new Set([character.name]));
+                }
+                else if(bounty < 100000000) {
+                    if(attributeMap.has("50,000,000-100,000,000"))
+                        attributeMap.get("50,000,000-100,000,000").add(character.name);
+                    else
+                        attributeMap.set("50,000,000-100,000,000", new Set([character.name]));
+                }
+                else if(bounty < 500000000) {
+                    if(attributeMap.has("100,000,000-500,000,000"))
+                        attributeMap.get("100,000,000-500,000,000").add(character.name);
+                    else
+                        attributeMap.set("100,000,000-500,000,000", new Set([character.name]));
+                }
+                else if(bounty < 1000000000) {
+                    if(attributeMap.has("500,000,000-1,000,000,000"))
+                        attributeMap.get("500,000,000-1,000,000,000").add(character.name);
+                    else
+                        attributeMap.set("500,000,000-1,000,000,000", new Set([character.name]));
+                }
+                else if(bounty >= 1000000000) {
+                    if(attributeMap.has("1,000,000,000+"))
+                        attributeMap.get("1,000,000,000+").add(character.name);
+                    else
+                        attributeMap.set("1,000,000,000+", new Set([character.name]));
+                }
+            }
+        }
+        else if(key !== "id" && key !== "name" && key !== "image" && key !== "occupation" && key !== "status" && key !== "dfname" && key !== "dfename" && key !== "debut") {
             if(attributeMap.has(value)) {
                 attributeMap.get(value).add(character.name);
             }
@@ -80,7 +146,16 @@ characters.forEach(character => {
     }
 })
 
-// console.log(attributeMap)
+console.log(attributeMap.get("No Bounty"))
+console.log(attributeMap.get("0-100,000"))
+console.log(attributeMap.get("100,000-500,000"))
+console.log(attributeMap.get("500,000-1,000,000"))
+console.log(attributeMap.get("1,000,000-10,000,000"))
+console.log(attributeMap.get("10,000,000-50,000,000"))
+console.log(attributeMap.get("50,000,000-100,000,000"))
+console.log(attributeMap.get("100,000,000-500,000,000"))
+console.log(attributeMap.get("500,000,000-1,000,000,000"))
+console.log(attributeMap.get("1,000,000,000+"))
 
 export default characters;
 export { characterMap, attributeMap }

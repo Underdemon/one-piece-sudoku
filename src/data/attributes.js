@@ -1,7 +1,8 @@
 // attributes.js
-import { affiliation, origin, race, dftype, gender, bounty, haki, arcs } from "../../scraper/atribs.json"
-let attributes = [affiliation, origin, race, dftype, gender, bounty, haki, arcs]
-let attributesNames = ["affiliation", "origin", "race", "dftype", "gender", "bounty", "haki", "arcs"];
+import { affiliation, origin, race, dftype, gender, haki, arcs } from "../../scraper/atribs.json"
+let attributes = [affiliation, origin, race, dftype, gender, haki, arcs]
+let attributesNames = ["affiliation", "origin", "race", "dftype", "gender", "haki", "arcs"];
+
 
 function selectAttributePair(random) {
     let lists = attributes;
@@ -32,11 +33,51 @@ function selectAttributePair(random) {
     }
 }
 
+/*
+
+console.log(attributeMap.get("No Bounty"))
+console.log(attributeMap.get("0-100,000"))
+console.log(attributeMap.get("100,000-500,000"))
+console.log(attributeMap.get("500,000-1,000,000"))
+console.log(attributeMap.get("1,000,000-10,000,000"))
+console.log(attributeMap.get("10,000,000-50,000,000"))
+console.log(attributeMap.get("50,000,000-100,000,000"))
+console.log(attributeMap.get("100,000,000-500,000,000"))
+console.log(attributeMap.get("500,000,000-1,000,000,000"))
+console.log(attributeMap.get("1,000,000,000+"))
+
+*/
 function selectSingleAttribute(random) {
     let lists = attributes;
-    const totalAttributes = lists.reduce((sum, list) => sum + list.length, 0);
+    const totalAttributes = lists.reduce((sum, list) => sum + list.length, 0);    
+    let bountyRange = Math.floor(Math.random() * (totalAttributes + 10));
+    if(bountyRange <= 10) {
+        switch(bountyRange) {
+            case 1:
+                return ["Bounty", "No Bounty"];
+            /*
+            case 2:
+                return ["Bounty", "0-100,000"];
+            case 3:
+                return ["Bounty", "100,000-500,000"];
+            case 4:
+                return ["Bounty", "500,000-1,000,000"];
+            */
+            case 5:
+                return ["Bounty", "1,000,000-10,000,000"];
+            case 6:
+                return ["Bounty", "10,000,000-50,000,000"];
+            case 7:
+                return ["Bounty", "50,000,000-100,000,000"];
+            case 8:
+                return ["Bounty", "100,000,000-500,000,000"];
+            case 9:
+                return ["Bounty", "500,000,000-1,000,000,000"];
+            case 10:
+                return ["Bounty", "1,000,000,000+"];
+        }
+    }
     let index = random % totalAttributes;
-    
     for (let i = 0; i < lists.length; i++) {
         const list = lists[i];
         if (index < list.length) {
@@ -49,6 +90,14 @@ function selectSingleAttribute(random) {
         index -= list.length;
     }
 }
+
+/*
+no bounty, 0-50,000, 50,000-100,000, 100,000-500,000, 500,000-1,000,000, 1,000,000+
+need to add bounty range characters to attributemap
+select random attrib, 
+generate rand number (range totalattributes + 6 (6 bounty ranges)) if number is <= 6 choose bounty range based on rand number. 
+max 1 attribute is a bounty
+*/
 
 export default attributes;
 export {selectAttributePair, selectSingleAttribute}
