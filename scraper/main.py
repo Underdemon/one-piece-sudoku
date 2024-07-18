@@ -61,6 +61,8 @@ arcs_set.update(["Romance Dawn",
         "Wano Country",
         "Egghead"])
 
+count = 0
+
 def clean_text(text):
     # Remove references like [1], [2], etc.
     text = re.sub(r'\[\d+\]', '', text)
@@ -279,15 +281,25 @@ def extract_bounty(html):
             bounty = re.search(r'Value: ([\d,]+) Belly', title_attr).group(1)
             cross_guild = True
 
-    multiple_bounty_span = html.css_first("div[data-source='bounty'] > div.pi-data-value > ul > li")
-    if multiple_bounty_span:
-        bounty = multiple_bounty_span.text()
+    # multiple_bounty_span = html.css_first("div[data-source='bounty'] > div.pi-data-value > ul > li")
+    # if multiple_bounty_span:
+    #     bounty = multiple_bounty_span.text()
         
-    single_bounty_span = html.css_first("div[data-source='bounty'] > div.pi-data-value > s")
-    if single_bounty_span:
-        bounty = single_bounty_span.text()
+    # single_bounty_span = html.css_first("div[data-source='bounty'] > div.pi-data-value > s")
+    # if single_bounty_span:
+    #     bounty = single_bounty_span.text()
         
-    return clean_text(bounty), cross_guild
+    # return clean_text(bounty), cross_guild
+    
+    bounty_div = html.css('div[data-source="bounty"]')
+        
+    if bounty_div:
+        bounty_value = bounty_div[0].css_first('div.pi-data-value.pi-font')
+        if bounty_value:
+            # Extract text without HTML tags and return
+            bounty = ' '.join(bounty_value.text(strip=True).split()).split("[")[0]
+    
+    return bounty, cross_guild
 
 def extract_haki(html):
     abilities_tab = html.css_first("a[title$='/Abilities and Powers']")
@@ -411,6 +423,8 @@ def extract_character_detail(html):
     if aside is None:
         return attributes
     
+    attributes['id'] = count
+    
     attributes['name'] = extract_text(aside, "h2")
     attributes['image'] = aside.css_first("img").attributes.get("src", "n/a") if aside.css_first("img") else "None"
     
@@ -489,6 +503,7 @@ def parse_page(html):
         yield urljoin(base_url, character.css_first("a").attributes["href"])
 
 def main():
+    global count
     character_list = []
     baseurl = "https://onepiece.fandom.com/wiki/List_of_Canon_Characters"
     character_list_html = get_html(baseurl)
@@ -496,7 +511,6 @@ def main():
     
     max_length = max(len(character) for character in characters)
     total_characters = len(characters)
-    count = 0
     
     with tqdm(total=total_characters, desc="Progress", unit=" characters", ncols=150, bar_format='{l_bar}{bar}{r_bar}', ascii=False, leave=True) as pbar:
         for character in characters:
@@ -558,8 +572,7 @@ if __name__ == "__main__":
 '''
 https://stackoverflow.com/a/45340858
 
-add character id/remove duplicates
-add bounty scraping for characters like https://onepiece.fandom.com/wiki/Tony_Tony_Chopper and https://onepiece.fandom.com/wiki/Eustass_Kid
+disallow selection of attribs: origin-none, race-other, dftype-unknown, debut_arc-unknown, bounty-unknown (remove all text after first [ & clean text)
 
 for testing, dont filter the counters to > 1 count, and check what needs to be combined
     
