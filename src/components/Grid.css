@@ -1,4 +1,3 @@
-/* src/components/Grid.css */
 .grid-container {
   display: flex;
   flex-direction: column;
@@ -23,86 +22,93 @@
 .grid {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
   width: 100%;
   transition: filter 300ms ease;
   box-sizing: border-box;
 }
 
-  .grid.blurred {
-    filter: blur(5px);
-    pointer-events: none;
-  }
-  
-  .row {
-    display: flex;
-    gap: 5px;
-  }
-  
-  .cell, .label-cell {
-    width: 100px;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f0f0f0;
-    border: 1px solid #000;
-    cursor: pointer;
-  }
-  
-  .label-cell {
-    background-color: #242424;
-    border: none;
-    cursor: default;
-  }
-  
-  .cell:hover {
-    background-color: #ddd;
-  }
-  
-  /* Color the top-left cell orange */
-  .row:first-child .cell:first-child {
-    background-color: #f0f0f0;
-  }
-  
-  /* Round corners for edge cells */
-  .cell.top-left {
-    border-top-left-radius: 10px;
-  }
-  
-  .cell.top-right {
-    border-top-right-radius: 10px;
-  }
-  
-  .cell.bottom-left {
-    border-bottom-left-radius: 10px;
-  }
-  
-  .cell.bottom-right {
-    border-bottom-right-radius: 10px;
-  }
-  
-  .straw-hat {
-    width: 50%;
-    height: 50%;
-    /* filter: invert(33%) sepia(93%) saturate(3904%) hue-rotate(4deg) brightness(105%) contrast(102%); */
-    /* https://codepen.io/sosuke/pen/Pjoqqp */
-  }
+.blurred {
+  filter: blur(5px);
+  pointer-events: none;
+}
 
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal-content {
-    background: #3a3a3a;
-    padding: 20px;
-    border-radius: 8px;
-  }
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.cell, .label-cell {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #202325;
+  border: 1px solid #8c8273;
+  cursor: pointer;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 1em; /* Ensure consistent text size */
+  text-align: center;
+  overflow: hidden;
+  white-space: normal; /* Allow text to wrap */
+  word-wrap: break-word; /* Break words if necessary */
+}
+
+.label-cell {
+  background-color: #242424;
+  border: none;
+  cursor: default;
+}
+
+.cell:hover {
+  background-color: rgba(42, 71, 95, 1);
+}
+
+/* Color the top-left cell orange */
+.row:first-child .cell:first-child {
+  background-color: rgba(42, 71, 95, 1);
+}
+
+/* Round corners for edge cells */
+.cell.top-left {
+  border-top-left-radius: 10px;
+}
+
+.cell.top-right {
+  border-top-right-radius: 10px;
+}
+
+.cell.bottom-left {
+  border-bottom-left-radius: 10px;
+}
+
+.cell.bottom-right {
+  border-bottom-right-radius: 10px;
+}
+
+.straw-hat {
+  width: 50%;
+  height: 50%;
+  /* filter: invert(33%) sepia(93%) saturate(3904%) hue-rotate(4deg) brightness(105%) contrast(102%); */
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #3a3a3a;
+  padding: 20px;
+  border-radius: 8px;
+}

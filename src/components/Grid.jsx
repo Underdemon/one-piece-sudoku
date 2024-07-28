@@ -85,7 +85,7 @@ const Grid = ({ size }) => {
 
   return (
     <div className="grid-container">
-      <div className="guess-counter">
+      <div className={`guess-counter ${showCharacterList ? 'blurred' : ''}`}>
         <span>Failed Guesses: {failedGuesses}</span>
         <span>Total Guesses: {totalGuesses} / {maxGuesses}</span>
       </div>
