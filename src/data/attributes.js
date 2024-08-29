@@ -3,6 +3,9 @@ import { affiliation, origin, race, dftype, gender, haki, arcs } from "../../scr
 let attributes = [affiliation, origin, race, dftype, gender, haki, arcs]
 let attributesNames = ["affiliation", "origin", "race", "dftype", "gender", "haki", "arcs"];
 
+attributes[0] = attributes[0].filter(attr => attr.toLowerCase() !== "n/a");
+attributes[1] = attributes[1].filter(attr => attr.toLowerCase() !== "none");
+attributes[4] = attributes[4].filter(attr => attr.toLowerCase() !== "unknown");
 
 function selectAttributePair(random) {
     let lists = attributes;

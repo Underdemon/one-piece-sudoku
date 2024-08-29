@@ -10,12 +10,12 @@ A One Piece game inspired by [pokedoku]
 Find it [here](https://one-piece-sudoku.vercel.app/)
 
 ## Table of Contents
-### [Description](#description)
-### [Requirements](#requirements)
-### [Usage](#usage)
-### [Roadmap](#roadmap)
-### [License](#license)
-### [Contact](#contact)
+### [Description](#description-1)
+### [Requirements](#requirements-1)
+### [Usage](#usage-1)
+### [Roadmap](#roadmap-1)
+### [License](#license-1)
+### [Contact](#contact-1)
 
 </div>
 
@@ -101,9 +101,9 @@ _Tip: [follow this StackOverflow reply to find out how to automatically create a
 - [ ] Make it easier to see the characters after a correct guess
 
 ### Bugs
-- [ ] Fix guessbar locking the grid on 9 guesses rather than 10
-- [ ] Remove null attributes (eg: Origin: None)
-- [ ] Clean bounty text in code (eg: look at attribs.json line 423)
+- [x] Fix guessbar locking the grid on 9 guesses rather than 10
+- [x] Remove null attributes (eg: Origin: None)
+- [x] Clean bounty text in code
 
 ## License
 

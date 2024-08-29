@@ -7,6 +7,7 @@ import re
 from tqdm import tqdm
 from collections import Counter
 
+
 base_url = "https://onepiece.fandom.com"
 affiliation_set = set()
 origin_set = set()
@@ -63,7 +64,18 @@ arcs_set.update(["Romance Dawn",
 
 count = 0
 
-def clean_text(text):
+def clean_text(text):   
+    """
+    Clean the given text by removing references, notations, text within parentheses,
+    fixing missing spaces before capital letters, and removing extra spaces.
+
+    Args:
+        text (str): The text to be cleaned.
+
+    Returns:
+        str: The cleaned text.
+        
+    """
     # Remove references like [1], [2], etc.
     text = re.sub(r'\[\d+\]', '', text)
     # Remove "former" and similar notations
@@ -76,7 +88,29 @@ def clean_text(text):
     text = re.sub(r'\s+', ' ', text).strip()
     return text
 
-def get_html(baseurl):
+def get_html(baseurl):    
+    """
+    Retrieves the HTML content from the specified URL.
+    
+    Args:
+        baseurl (str): The URL to retrieve the HTML from.
+        
+    Returns:
+        HTMLParser or None: An instance of the HTMLParser class containing the parsed HTML content,
+        or None if an error occurred during the request.
+        
+    Raises:
+        httpx.RequestError: If an error occurs while making the HTTP request.
+        httpx.HTTPStatusError: If the HTTP response status code indicates an error.
+        
+    Notes:
+        - The function uses the User-Agent header to mimic a web browser.
+        - The function sets a timeout of 10 seconds for the HTTP request.
+        - The function does not follow redirects if the response status code is 301 or 302.
+        - If a redirect occurs, the function prints the redirect response and location.
+        - If an error occurs during the request, the function prints an error message.
+        
+    """
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/126.0"}
 
     try:
@@ -93,6 +127,20 @@ def get_html(baseurl):
         return None
 
 def extract_text(html, sel):
+    """
+    Extracts text from HTML using a CSS selector.
+
+    Args:
+        html (HTML): The HTML object to extract text from.
+        sel (str): The CSS selector to locate the desired element.
+
+    Returns:
+        str: The extracted text, or "None" if no element is found.
+
+    Raises:
+        AttributeError: If the selected element does not have a text attribute.
+        
+    """
     try:
         raw_text = html.css_first(sel).text(strip=True)
         return clean_text(raw_text)
@@ -100,6 +148,16 @@ def extract_text(html, sel):
         return "None"
 
 def extract_debut(text):
+    """
+    Extracts debut information from the given text.
+
+    Args:
+        text (str): The text containing debut information.
+
+    Returns:
+        dict: A dictionary containing the debut information with keys "chapter" and "episode".
+
+    """
     debut_info = {"chapter": "None", "episode": "None"}
     # Split the debut text by semicolon and process each part
     parts = text.split(';')
@@ -114,6 +172,20 @@ def extract_debut(text):
     return debut_info
 
 def get_debut_arc(chapter):
+    """
+    Returns the debut arc of a given chapter number.
+    
+    Args:
+    - chapter (int): The chapter number.
+    
+    Returns:
+    - str: The name of the debut arc corresponding to the given chapter number.
+    
+    Notes:
+    - The debut arcs are based on the One Piece manga series.
+    - The chapter ranges for each arc are inclusive.
+    - If the given chapter number does not fall within any arc range, "Egghead" is returned.
+    """
     chapter = int(chapter)
     
     if chapter >= 1 and chapter <= 7:
@@ -178,6 +250,15 @@ def get_debut_arc(chapter):
         return "Egghead"
 
 def extract_gender(html):
+    """
+    Extracts the gender of a character from the given HTML.
+
+    Args:
+        html (str): The HTML content of the page.
+
+    Returns:
+        str: The gender of the character. Possible values are "Female", "Male", or "Unknown".
+    """
     gender = "Unknown"
     category = html.css_first("div.page-header__categories")
     if category:
@@ -193,6 +274,20 @@ def extract_gender(html):
     return gender
 
 def extract_race(html):
+    """
+    Extracts the race information from the given HTML.
+    
+    Args:
+        html (HTML): The HTML object containing the race information.
+        
+    Returns:
+        list: A list of races extracted from the HTML.
+        
+    Notes:
+        - The function searches for race categories in the HTML and extracts the races
+        associated with those categories, appending them to the corresponding race to the list.
+        - If no race is found, the function appends "Other" to the list.
+    """
     race = []
     category = html.css_first("div.page-header__categories")
     dropdown = html.css_first("div.wds-dropdown__content")
@@ -272,6 +367,15 @@ def extract_race(html):
         
 
 def extract_bounty(html):
+    """
+    Extracts the bounty value and cross-guild flag from the given HTML.
+    
+    Args:
+        html (str): The HTML content to extract the bounty from.
+        
+    Returns:
+        tuple: A tuple containing the bounty value (str) and the cross-guild flag (bool).
+    """
     bounty = "None"
     cross_guild = False
     cross_guild_bounty_span = html.css_first("div[data-source='bounty'] > div.pi-data-value > span")
@@ -280,16 +384,6 @@ def extract_bounty(html):
         if title_attr:
             bounty = re.search(r'Value: ([\d,]+) Belly', title_attr).group(1)
             cross_guild = True
-
-    # multiple_bounty_span = html.css_first("div[data-source='bounty'] > div.pi-data-value > ul > li")
-    # if multiple_bounty_span:
-    #     bounty = multiple_bounty_span.text()
-        
-    # single_bounty_span = html.css_first("div[data-source='bounty'] > div.pi-data-value > s")
-    # if single_bounty_span:
-    #     bounty = single_bounty_span.text()
-        
-    # return clean_text(bounty), cross_guild
     
     bounty_div = html.css('div[data-source="bounty"]')
         
@@ -299,9 +393,22 @@ def extract_bounty(html):
             # Extract text without HTML tags and return
             bounty = ' '.join(bounty_value.text(strip=True).split()).split("[")[0]
     
-    return bounty, cross_guild
+    bounty = clean_text(bounty)
+    re.sub(r'[^0-9,]', '', bounty)
+    if not bounty:
+        bounty = "Unknown"
+    return clean_text(bounty), cross_guild
 
 def extract_haki(html):
+    """
+    Extracts the types of Haki a character has from the given HTML.
+    
+    Args:
+        html (str): The HTML content to extract Haki from.
+        
+    Returns:
+        dict: A dictionary containing the types of Haki found in the HTML.
+    """
     abilities_tab = html.css_first("a[title$='/Abilities and Powers']")
     if abilities_tab:
         abilities_url = urljoin(base_url, abilities_tab.attributes.get("href"))
@@ -342,6 +449,15 @@ def extract_haki(html):
     return haki_types
     
 def extract_arcs(html):    
+    """
+    Extracts the arcs from the given HTML content.
+    
+    Args:
+        html (str): The HTML content to extract arcs from.
+        
+    Returns:
+        dict: A dictionary containing the arcs as keys and their presence status as values.
+    """
     arc_ids = [
         "Romance_Dawn_Arc", "Orange_Town_Arc", "Syrup_Village_Arc", "Baratie_Arc",
         "Arlong_Park_Arc", "Loguetown_Arc", "Reverse_Mountain_Arc", "Whiskey_Peak_Arc",
@@ -353,6 +469,7 @@ def extract_arcs(html):
         "Levely_Arc", "Wano_Country_Arc", "Egghead_Arc"
     ]
     
+    # Dictionary to store arcs and their presence status
     arcs = {}
     for arc_id in arc_ids:
         if arc_id == "Sabaody_Archipelago_Arc":
@@ -364,6 +481,8 @@ def extract_arcs(html):
         arcs[arc_name] = False
         
     tab_changed = False
+    
+    # Check if there is a history tab and update HTML content accordingly
     history_tab = html.css_first("a[title$='/History']")
     if history_tab:
         histories_url = urljoin(base_url, history_tab.attributes.get("href"))
@@ -382,6 +501,7 @@ def extract_arcs(html):
         if html.css_first(f"span#{arc_id}.mw-headline"):
             arcs[arc_name] = True
             
+    # If tab was changed, check for sub-tabs and update arcs dictionary
     if tab_changed:
         # Find the first occurrence of div.article-tabs
         article_tabs_div = html.css_first("div.article-tabs")
@@ -415,7 +535,31 @@ def extract_arcs(html):
     return arcs
 
 def extract_character_detail(html):
+    """
+    Extracts character details from the given HTML.
+
+    This function parses the HTML to extract various character attributes such as
+    name, image, occupation, affiliation, status, and origin. It processes the 
+    information contained within an 'aside' element with the class 'portable-infobox'.
+
+    Args:
+        html (object): The HTML content to be parsed.
+
+    Returns:
+        dict: A dictionary containing the extracted character attributes.
+    """
+    
     def split_and_clean(text):
+        """
+        Splits the given text by ';' and removes leading and trailing whitespace from each item.
+
+        Args:
+            text (str): The text to be split and cleaned.
+
+        Returns:
+            list: A list of cleaned items.
+
+        """
         return [item.strip() for item in text.split(';') if item.strip()]
     
     attributes = {}
@@ -498,11 +642,31 @@ def extract_character_detail(html):
     return attributes
 
 def parse_page(html):
+    """
+    Parse the HTML content and extract URLs of characters from a table.
+
+    Args:
+        html (str): The HTML content to parse.
+
+    Yields:
+        str: The URLs of characters.
+
+    """
     characters = html.css("table.fandom-table:first-of-type tbody tr td:nth-child(2)")
     for character in characters:
         yield urljoin(base_url, character.css_first("a").attributes["href"])
 
 def main():
+    """
+    Scrapes data from a website and saves it to JSON files.
+    The function performs the following steps:
+    1. Retrieves the HTML content of a webpage containing a list of canon characters.
+    2. Parses the HTML content to extract the character URLs.
+    3. Scrapes the character details from each URL and appends them to a list.
+    4. Displays a progress bar to track the scraping progress.
+    5. Saves the scraped character details to a JSON file.
+    6. Saves the counts of various character attributes to separate JSON files.
+    """
     global count
     character_list = []
     baseurl = "https://onepiece.fandom.com/wiki/List_of_Canon_Characters"
@@ -546,7 +710,7 @@ def main():
     with open("atribs.json", "w", encoding="utf-8") as f:
         json.dump(attribs, f, ensure_ascii=False, indent=4)
         
-    trash_values_count = 2
+    trash_values_count = 10
     attrib_counters = {
         "affiliation_counter": dict(filter(lambda x: x[1] >= trash_values_count, affiliation_counter.items())),
         "origin_counter": dict(filter(lambda x: x[1] >= trash_values_count, origin_counter.items())),
@@ -565,45 +729,12 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-# https://www.youtube.com/playlist?list=PLRzwgpycm-FiTz9bGQoITAzFEOJkbF6Qp
-
-
 '''
-https://stackoverflow.com/a/45340858
+regex to look for docstrings: # """(.|\n)+?"""
 
 disallow selection of attribs: origin-none, race-other, dftype-unknown, debut_arc-unknown, bounty-unknown (remove all text after first [ & clean text)
 
 for testing, dont filter the counters to > 1 count, and check what needs to be combined
-    
-parse json files into react
-    https://www.w3schools.com/js/js_json_parse.asp
 
-    
 # skip any (former) attribute?
-
-# add infusion haki manually?
-#So far, the only individuals seen capable of infusing Haoshoku Haki are Gol D. Roger, Edward Newgate,[44] Kaidou,[43] Monkey D. Luffy,[45] Big Mom,[46] Yamato,[47] Roronoa Zoro,[48] Silvers Rayleigh,[49] Shanks,[50] and Monkey D. Garp.[51]
-
-
-
-noita workshop - spell lab
-mens camp collar shirt (light colour)
-    https://www.abercrombie.com/shop/uk/p/camp-collar-summer-linen-blend-shirt-55046826#stylitics-container
-    https://uk.tommy.com/search?searchTerm=camp+collar
-    https://www.originalpenguin.co.uk/products/linen-ecovero-shirt-blue-opwm2100gp-413?source=aw&sv1=affiliate&sv_campaign_id=13430
-    
-    also:
-        https://www.vans.co.uk/shop/en-gb/vans-gb/sale-en/mn-warp-sling-bag-cosmic-sky-vn0a3i6bcr2
-        
-        
-        https://noragishop.com/shop/?orderby=rating
-    
-mens noragi jacket
-ask mummy about clothes
-move plant in garden
-WORKOUT (make a simple plan for upstairs, HIIT workout on bike?, stretching)
-JOB SEARCH
-https://github.com/OrbEnforcer/Windux
-
 '''
