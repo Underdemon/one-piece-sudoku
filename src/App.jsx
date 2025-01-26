@@ -37,13 +37,13 @@ function App() {
                     </div>
                 </RNGProvider>
             </CharacterProvider>
-            <SpeedInsights/>
             <button className="info-button" onClick={handleButtonClick}>ℹ️</button>
             {sidebarVisible && (
                 <div className="acrylic sidebar" onClick={handleDivClick}>
                     <p>Try click the background!</p>
                 </div>
             )}
+            <SpeedInsights/>
         </div>
     );
 }
