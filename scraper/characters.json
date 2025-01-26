@@ -57992,7 +57992,7 @@
     {
         "id": 886,
         "name": "Monkey D. Luffy",
-        "image": "https://static.wikia.nocookie.net/onepiece/images/6/6d/Monkey_D._Luffy_Anime_Post_Timeskip_Infobox.png/revision/latest/scale-to-width-down/239?cb=20240306200817",
+        "image": "../src/assets/luffy.png",
         "occupation": [
             "Pirate Captain",
             "Emperor",

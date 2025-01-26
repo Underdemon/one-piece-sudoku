@@ -1,10 +1,10 @@
 import React from "react";
-import { useRNG } from "../context/RNGContext";
+import {useRNG} from "../context/RNGContext";
 
 const RNGComponent = () => {
-    const { getNextRandom } = useRNG();
+    const {getNextRandom} = useRNG();
 
-    return(
+    return (
         <div>
             <h1>Random Number Generator</h1>
             <button onClick={() => alert(getNextRandom(100))}>

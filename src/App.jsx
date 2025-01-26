@@ -1,33 +1,51 @@
 // src/App.jsx
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import Grid from './components/Grid';
-import CharacterList from './components/CharacterList';
-import { CharacterProvider } from './context/CharacterContext.jsx';
-import { RNGProvider } from './context/RNGContext';
-import RNGComponent from './components/RNGComponent';
-import RandomCharacters from './components/RandomCharacters.jsx'
-import RNGattribs from './components/RNGattribs.jsx'
-import { SpeedInsights } from "@vercel/speed-insights/react"
+import {CharacterProvider} from './context/CharacterContext.jsx';
+import {RNGProvider} from './context/RNGContext';
+import {SpeedInsights} from "@vercel/speed-insights/react"
+import Background from "./components/Background.jsx";
+import title from './assets/title.png';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
-  return (
-    <div>
-      <CharacterProvider>
-        <RNGProvider>
-          <div>
-            <h1>GRID</h1>
-            {/* <CharacterList /> */}
-            <Grid size={3} />
-            {/* <RNGComponent />
-            <RandomCharacters />
-            <RNGattribs /> */}
-          </div>
-        </RNGProvider>
-      </CharacterProvider>
-      <SpeedInsights />
-    </div>
-  );
+    const [sidebarVisible, setSidebarVisible] = useState(false);
+
+    const handleDivClick = (event) => {
+        event.stopPropagation();
+    };
+
+    const toggleSidebar = () => {
+        setSidebarVisible(!sidebarVisible);
+    };
+
+    const handleButtonClick = (event) => {
+        handleDivClick(event);
+        toggleSidebar();
+    };
+
+    return (
+        <div>
+            <Background/>
+            <CharacterProvider>
+                <RNGProvider>
+                    <div onClick={handleDivClick} className="acrylic">
+                        {/*<h1>ONE PIECE SUDOKU</h1>*/}
+                        <img src={title} alt="One Piece Sudoku" className="title"/>
+                        <Grid size={3}/>
+                    </div>
+                </RNGProvider>
+            </CharacterProvider>
+            <SpeedInsights/>
+            <button className="info-button" onClick={handleButtonClick}>ℹ️</button>
+            {sidebarVisible && (
+                <div className="acrylic sidebar" onClick={handleDivClick}>
+                    <p>Try click the background!</p>
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default App;

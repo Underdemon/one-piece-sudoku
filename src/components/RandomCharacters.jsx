@@ -1,24 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useRNG } from '../context/RNGContext.jsx';
-import { selectAttributePair } from '../data/attributes.js'
+import React, {useEffect, useState} from 'react';
+import {useRNG} from '../context/RNGContext.jsx';
 
 const RandomCharacterDisplay = () => {
-    const { getRandomCharacters } = useRNG();
-    const { getAttributes } = useRNG();
+    const {getRandomCharacters} = useRNG();
+    const {getAttributes} = useRNG();
     const [randomCharacters, setRandomCharacters] = useState([]);
 
     useEffect(() => {
-        // Ensure that getRandomCharacters is stable by memoizing it with useCallback
+        // ensure that getRandomCharacters is stable by memoizing it with useCallback
         const getAndSetRandomCharacters = () => {
-            const characters = getRandomCharacters(12); // get 5 random characters
+            const characters = getRandomCharacters(12);
             setRandomCharacters(characters);
         };
 
-        getAndSetRandomCharacters(); // Call the function immediately
-        // console.log(getAttributes(3))
-        // No need to include getRandomCharacters in the dependency array since it's stable
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // Run the effect only once after component mounts
+        getAndSetRandomCharacters();
+        // no need to include getRandomCharacters in dependency array since it's stable
+    }, []); // run the effect only once after component mounts
 
     return (
         <div>

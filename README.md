@@ -94,11 +94,21 @@ _Tip: [follow this StackOverflow reply to find out how to automatically create a
 ## Roadmap
 - [x] Scrape data from wiki
 - [x] Get logic for grid generation working
-- [ ] Give website a proper colour scheme
+- [x] Get logic for guess checking working
+- [x] Get logic for guess modal working
+- [x] Improve guess modal UI
+- [x] Get dynamic, physics based background working
 - [ ] Add point scoring system
 - [ ] Add ID to grids to allow for users to share different puzzles
 - [ ] Remove affiliations that only have a few characters associated to them
 - [ ] Make it easier to see the characters after a correct guess
+- [ ] Give website a proper colour scheme
+- [ ] Add a loading screen
+- [ ] Add a proper footer
+- [ ] Style the grid and guess modal
+- [ ] Add a timer
+- [ ] Add a hint system
+- [ ] Add a settings menu (including for the background)
 
 ### Bugs
 - [x] Fix guessbar locking the grid on 9 guesses rather than 10

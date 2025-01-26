@@ -1,5 +1,6 @@
 // attributes.js
-import { affiliation, origin, race, dftype, gender, haki, arcs } from "../../scraper/atribs.json"
+import {affiliation, arcs, dftype, gender, haki, origin, race} from "../../scraper/atribs.json"
+
 let attributes = [affiliation, origin, race, dftype, gender, haki, arcs]
 let attributesNames = ["affiliation", "origin", "race", "dftype", "gender", "haki", "arcs"];
 
@@ -23,7 +24,7 @@ function selectAttributePair(random) {
 
     let index = random % totalCombinations;
     let runningTotal = 0;
-    
+
     for (const [i, j] of listPairs) {
         const numCombinations = lists[i].length * lists[j].length;
         if (index < runningTotal + numCombinations) {
@@ -50,48 +51,116 @@ console.log(attributeMap.get("500,000,000-1,000,000,000"))
 console.log(attributeMap.get("1,000,000,000+"))
 
 */
+// function selectSingleAttribute(random) {
+//     let lists = attributes;
+//     const totalAttributes = lists.reduce((sum, list) => sum + list.length, 0);
+//     let bountyRange = Math.floor(Math.random() * (totalAttributes + 10));
+//     if(bountyRange <= 10) {
+//         switch(bountyRange) {
+//             case 1:
+//                 return ["Bounty", "No Bounty"];
+//             case 2:
+//                 return ["Bounty", "0-100,000"];
+//             case 3:
+//                 return ["Bounty", "100,000-500,000"];
+//             case 4:
+//                 return ["Bounty", "500,000-1,000,000"];
+//             case 5:
+//                 return ["Bounty", "1,000,000-10,000,000"];
+//             case 6:
+//                 return ["Bounty", "10,000,000-50,000,000"];
+//             case 7:
+//                 return ["Bounty", "50,000,000-100,000,000"];
+//             case 8:
+//                 return ["Bounty", "100,000,000-500,000,000"];
+//             case 9:
+//                 return ["Bounty", "500,000,000-1,000,000,000"];
+//             case 10:
+//                 return ["Bounty", "1,000,000,000+"];
+//         }
+//     }
+//     let index = random % totalAttributes;
+//     for (let i = 0; i < lists.length; i++) {
+//         const list = lists[i];
+//         if (index < list.length) {
+//             if(attributesNames[i] === "arcs") {
+//                 return Math.random() < 0.5 ? ["Appeared In", list[index]] : ["Debuted In", list[index]];
+//             }
+//             else
+//                 return [attributesNames[i], list[index]];
+//         }
+//         index -= list.length;
+//     }
+// }
 function selectSingleAttribute(random) {
+    if (typeof attributes === 'undefined' || typeof attributesNames === 'undefined') {
+        throw new Error("attributes or attributesNames is not defined");
+    }
+
     let lists = attributes;
-    const totalAttributes = lists.reduce((sum, list) => sum + list.length, 0);    
+
+    // currently 439 total attributes
+    const totalAttributes = lists.reduce((sum, list) => sum + list.length, 0);
     let bountyRange = Math.floor(Math.random() * (totalAttributes + 10));
-    if(bountyRange <= 10) {
-        switch(bountyRange) {
+    let result;
+
+    if (bountyRange <= 10) {
+        switch (bountyRange) {
             case 1:
-                return ["Bounty", "No Bounty"];
-            /*
+                result = ["Bounty", "No Bounty"];
+                break;
             case 2:
-                return ["Bounty", "0-100,000"];
+                result = ["Bounty", "0-100,000"];
+                break;
             case 3:
-                return ["Bounty", "100,000-500,000"];
+                result = ["Bounty", "100,000-500,000"];
+                break;
             case 4:
-                return ["Bounty", "500,000-1,000,000"];
-            */
+                result = ["Bounty", "500,000-1,000,000"];
+                break;
             case 5:
-                return ["Bounty", "1,000,000-10,000,000"];
+                result = ["Bounty", "1,000,000-10,000,000"];
+                break;
             case 6:
-                return ["Bounty", "10,000,000-50,000,000"];
+                result = ["Bounty", "10,000,000-50,000,000"];
+                break;
             case 7:
-                return ["Bounty", "50,000,000-100,000,000"];
+                result = ["Bounty", "50,000,000-100,000,000"];
+                break;
             case 8:
-                return ["Bounty", "100,000,000-500,000,000"];
+                result = ["Bounty", "100,000,000-500,000,000"];
+                break;
             case 9:
-                return ["Bounty", "500,000,000-1,000,000,000"];
+                result = ["Bounty", "500,000,000-1,000,000,000"];
+                break;
             case 10:
-                return ["Bounty", "1,000,000,000+"];
+                result = ["Bounty", "1,000,000,000+"];
+                break;
+            default:
+                result = ["Bounty", "Unknown"];
+                break;
         }
-    }
-    let index = random % totalAttributes;
-    for (let i = 0; i < lists.length; i++) {
-        const list = lists[i];
-        if (index < list.length) {
-            if(attributesNames[i] === "arcs") {
-                return Math.random() < 0.5 ? ["Appeared In", list[index]] : ["Debuted In", list[index]];
+    } else {
+        let index = random % totalAttributes;
+        for (let i = 0; i < lists.length; i++) {
+            const list = lists[i];
+            if (index < list.length) {
+                if (attributesNames[i] === "arcs") {
+                    result = Math.random() < 0.5 ? ["Appeared In", list[index]] : ["Debuted In", list[index]];
+                } else {
+                    result = [attributesNames[i], list[index]];
+                }
+                break;
             }
-            else
-                return [attributesNames[i], list[index]];
+            index -= list.length;
         }
-        index -= list.length;
     }
+
+    if (typeof result === 'undefined') {
+        throw new Error("Result is undefined. Check the logic for selecting attributes.");
+    }
+
+    return result;
 }
 
 /*
@@ -187,19 +256,19 @@ determinstically calculate the combination at some index
 // }
 
 
-    /*
+/*
 2
-    1) generate 6 attributes
-    2) generate attribute permutations as list (eg: [SMILE, Logia], [SMILE, Zoan] etc)
-    3) go through permutation until 9 possible combinations with > 1 char reached
-    4) if 9 combinations cant be reached reroll attribute
+1) generate 6 attributes
+2) generate attribute permutations as list (eg: [SMILE, Logia], [SMILE, Zoan] etc)
+3) go through permutation until 9 possible combinations with > 1 char reached
+4) if 9 combinations cant be reached reroll attribute
 
-    map.get([SMILE, Logia]).length > 0
+map.get([SMILE, Logia]).length > 0
 
-    key: [SMILE, Logia]
-    value: [character ABXX, character BCBBC]
+key: [SMILE, Logia]
+value: [character ABXX, character BCBBC]
 
-    key: [SMILE, Zoan]
-    value: [character JKSADNJKSD]
+key: [SMILE, Zoan]
+value: [character JKSADNJKSD]
 
-    */
+*/
