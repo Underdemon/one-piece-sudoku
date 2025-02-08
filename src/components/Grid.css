@@ -17,6 +17,26 @@
     color: #fff;
     border-radius: 5px;
     box-sizing: border-box;
+    transition: background-color 2s, transform 2s;
+}
+
+.flash-red {
+    background-color: red !important;
+}
+
+.flash-green {
+    background-color: green !important;
+}
+
+.shake {
+    animation: shake 1s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+    75% { transform: rotate(-2deg); }
 }
 
 .grid {

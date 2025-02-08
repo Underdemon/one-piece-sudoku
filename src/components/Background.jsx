@@ -93,10 +93,10 @@ const Background = () => {
                 return newSVGs;
             });
 
-            requestAnimationFrame(updatePositions);
+            // requestAnimationFrame(updatePositions);
         };
 
-        requestAnimationFrame(updatePositions);
+        // requestAnimationFrame(updatePositions);
 
         const handleClick = (event) => {
             const x = event.clientX;

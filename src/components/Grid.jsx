@@ -25,6 +25,7 @@ const Grid = ({size}) => {
     const [totalGuesses, setTotalGuesses] = useState(0);
     const [gameOver, setGameOver] = useState(false);
     const [usedCharacters, setUsedCharacters] = useState(new Set());
+    const [guessCounterClasses, setGuessCounterClasses] = useState('');
     const maxGuesses = 10;
 
     useEffect(() => {
@@ -67,14 +68,22 @@ const Grid = ({size}) => {
         const isValidChoice = attributeMap.get(rowAttrib).has(character.name) && attributeMap.get(colAttrib).has(character.name);
         setTotalGuesses(totalGuesses + 1);
 
+        setGuessCounterClasses('shake');
+
         if (isValidChoice && !usedCharacters.has(character.name)) {
             const newGridData = [...gridData];
             newGridData[row][col] = character;
             setGridData(newGridData);
             setUsedCharacters(new Set(usedCharacters).add(character.name));
+            setGuessCounterClasses(prev => `${prev} flash-green`);
         } else {
             setFailedGuesses(failedGuesses + 1);
+            setGuessCounterClasses(prev => `${prev} flash-red`);
         }
+
+        setTimeout(() => {
+            setGuessCounterClasses('');
+        }, 2000);
 
         if (totalGuesses + 1 == maxGuesses) {
             setGameOver(true);
@@ -100,7 +109,7 @@ const Grid = ({size}) => {
 
     return (
         <div className="grid-container">
-            <div className={`guess-counter ${showCharacterList ? 'blurred' : ''} ${gameOver ? 'game-over' : ''}`}>
+            <div className={`guess-counter ${guessCounterClasses} ${showCharacterList ? 'blurred' : ''} ${gameOver ? 'game-over' : ''}`}>
                 <span>Failed Guesses: {failedGuesses}</span>
                 {totalGuesses >= maxGuesses ? (
                     <span onClick={handleRefreshClick} style={{cursor: 'pointer'}}>
