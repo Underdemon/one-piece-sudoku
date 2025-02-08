@@ -3,7 +3,7 @@ import {CharacterContext} from '../context/CharacterContext.jsx';
 import './CharacterList.css';
 import {debounce} from '../utils/debounce.js';
 
-const CharacterList = ({onSelectCharacter}) => {
+const CharacterList = ({onSelectCharacter, usedCharacters}) => {
     const {characters} = useContext(CharacterContext);
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
@@ -52,7 +52,14 @@ const CharacterList = ({onSelectCharacter}) => {
                                 <img src={character.image.substring(0, character.image.indexOf(".png") + 4)}
                                      alt={character.name}/>
                                 <span className="character-name">{character.name}</span>
-                                <button onClick={() => onSelectCharacter(character)}>Select</button>
+                                {usedCharacters.has(character.name) ? (
+                                    <div className="used-container">
+                                        <button className="used-button" disabled>Used</button>
+                                        <span className="used-text">This character has already been used</span>
+                                    </div>
+                                ) : (
+                                    <button onClick={() => onSelectCharacter(character)}>Select</button>
+                                )}
                             </li>
                         ))}
                     </ul>

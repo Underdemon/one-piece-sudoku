@@ -24,6 +24,7 @@ const Grid = ({size}) => {
     const [failedGuesses, setFailedGuesses] = useState(0);
     const [totalGuesses, setTotalGuesses] = useState(0);
     const [gameOver, setGameOver] = useState(false);
+    const [usedCharacters, setUsedCharacters] = useState(new Set());
     const maxGuesses = 10;
 
     useEffect(() => {
@@ -66,10 +67,11 @@ const Grid = ({size}) => {
         const isValidChoice = attributeMap.get(rowAttrib).has(character.name) && attributeMap.get(colAttrib).has(character.name);
         setTotalGuesses(totalGuesses + 1);
 
-        if (isValidChoice) {
+        if (isValidChoice && !usedCharacters.has(character.name)) {
             const newGridData = [...gridData];
             newGridData[row][col] = character;
             setGridData(newGridData);
+            setUsedCharacters(new Set(usedCharacters).add(character.name));
         } else {
             setFailedGuesses(failedGuesses + 1);
         }
@@ -139,7 +141,7 @@ const Grid = ({size}) => {
             {showCharacterList && (
                 <div className='modal-overlay' onClick={closeCharacterList}>
                     <div className='modal-content' onClick={(e) => e.stopPropagation()}>
-                        <CharacterList onSelectCharacter={handleCharacterSelect}/>
+                        <CharacterList onSelectCharacter={handleCharacterSelect} usedCharacters={usedCharacters}/>
                     </div>
                 </div>
             )}
